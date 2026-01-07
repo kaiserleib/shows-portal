@@ -29,10 +29,10 @@ function Dashboard({ session }) {
         if (showrunnerData) {
           setShowrunner(showrunnerData)
 
-          // Fetch their shows
+          // Fetch their shows with signup counts
           const { data: showsData } = await supabase
             .from('shows')
-            .select('*')
+            .select('*, show_signups(count)')
             .eq('showrunner_id', showrunnerData.id)
             .order('show_date', { ascending: true })
 
@@ -91,15 +91,25 @@ function Dashboard({ session }) {
             <p>No shows yet. Create your first show!</p>
           ) : (
             <ul className="shows-list">
-              {shows.map(show => (
-                <li key={show.id} className="show-item">
-                  <Link to={`/s/${show.id}`}>
-                    <h3>{show.title}</h3>
-                    <p>{new Date(show.show_date).toLocaleDateString()}</p>
-                    <span className={`status status-${show.status}`}>{show.status}</span>
-                  </Link>
-                </li>
-              ))}
+              {shows.map(show => {
+                const signupCount = show.show_signups?.[0]?.count || 0
+                return (
+                  <li key={show.id} className="show-item">
+                    <Link to={`/dashboard/shows/${show.id}`}>
+                      <h3>{show.title}</h3>
+                      <p>
+                        {new Date(show.show_date).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                        <span className="signup-count"> · {signupCount} signup{signupCount !== 1 ? 's' : ''}</span>
+                      </p>
+                      <span className={`status status-${show.status}`}>{show.status.replace('_', ' ')}</span>
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           )}
         </section>

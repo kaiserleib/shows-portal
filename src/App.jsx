@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage'
 import ShowPage from './pages/ShowPage'
 import Dashboard from './pages/Dashboard'
 import CreateShow from './pages/CreateShow'
+import ShowManagement from './pages/ShowManagement'
 import MySignups from './pages/MySignups'
 import './App.css'
 
@@ -50,6 +51,7 @@ function App() {
       {/* Authenticated routes */}
       <Route path="/dashboard" element={<Dashboard session={session} />} />
       <Route path="/dashboard/shows/new" element={<CreateShow session={session} />} />
+      <Route path="/dashboard/shows/:showId" element={<ShowManagement session={session} />} />
       <Route path="/my-signups" element={<MySignups session={session} />} />
     </Routes>
   )
