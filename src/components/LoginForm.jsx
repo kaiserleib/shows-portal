@@ -1,35 +1,7 @@
-import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 import styles from '../styles/LoginForm.module.css'
 
 function LoginForm({ onClose }) {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-
-  const handleMagicLink = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    setMessage('')
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: window.location.origin
-      }
-    })
-
-    if (error) {
-      setError(error.message)
-    } else {
-      setMessage('Check your email for a login link!')
-    }
-
-    setLoading(false)
-  }
-
   const handleGoogleAuth = () => {
     supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -45,7 +17,7 @@ function LoginForm({ onClose }) {
         <button className={styles.closeButton} onClick={onClose}>×</button>
 
         <h2 className={styles.title}>Sign In</h2>
-        <p className={styles.subtitle}>Sign in to manage shows or view your signups</p>
+        <p className={styles.subtitle}>Sign in with Google to manage your shows</p>
 
         <button
           type="button"
@@ -72,35 +44,6 @@ function LoginForm({ onClose }) {
           </svg>
           Continue with Google
         </button>
-
-        <div className={styles.divider}>
-          <span>or</span>
-        </div>
-
-        <form onSubmit={handleMagicLink} className={styles.form}>
-          <div className={styles.field}>
-            <label className={styles.label}>Email</label>
-            <input
-              type="email"
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-          {message && <div className={styles.message}>{message}</div>}
-
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={loading}
-          >
-            {loading ? 'Sending...' : 'Send Magic Link'}
-          </button>
-        </form>
       </div>
     </div>
   )
