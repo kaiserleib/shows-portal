@@ -84,7 +84,7 @@ function Dashboard({ session }) {
         <section className="shows-section">
           <div className="section-header">
             <h2>Your Shows</h2>
-            <button className="create-show-btn">+ Create Show</button>
+            <Link to="/dashboard/shows/new" className="create-show-btn">+ Create Show</Link>
           </div>
 
           {shows.length === 0 ? (
