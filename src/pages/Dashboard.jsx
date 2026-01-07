@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import ShowrunnerRegistration from '../components/ShowrunnerRegistration'
 
 function Dashboard({ session }) {
   const [showrunner, setShowrunner] = useState(null)
@@ -10,7 +11,7 @@ function Dashboard({ session }) {
   useEffect(() => {
     if (!session) return
 
-    async function fetchData() {
+    async function fetchShowrunnerData() {
       // Check if user is a showrunner
       const { data: profile } = await supabase
         .from('profiles')
@@ -42,8 +43,13 @@ function Dashboard({ session }) {
       setLoading(false)
     }
 
-    fetchData()
+    fetchShowrunnerData()
   }, [session])
+
+  const handleRegistrationComplete = (newShowrunner) => {
+    setShowrunner(newShowrunner)
+    setShows([])
+  }
 
   if (!session) {
     return <Navigate to="/" replace />
@@ -58,12 +64,11 @@ function Dashboard({ session }) {
       <div className="dashboard">
         <header>
           <Link to="/">← Back</Link>
-          <h1>Become a Showrunner</h1>
         </header>
-        <main>
-          <p>You're not set up as a showrunner yet.</p>
-          <p>Showrunner registration coming soon...</p>
-        </main>
+        <ShowrunnerRegistration
+          session={session}
+          onComplete={handleRegistrationComplete}
+        />
       </div>
     )
   }

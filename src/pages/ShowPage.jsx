@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 
+// eslint-disable-next-line no-unused-vars
 function ShowPage({ session }) {
   const { showId } = useParams()
   const [show, setShow] = useState(null)

@@ -1,15 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import LoginForm from '../components/LoginForm'
 
 function LandingPage({ session }) {
-  const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin
-      }
-    })
-  }
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -27,10 +22,14 @@ function LandingPage({ session }) {
               <button onClick={handleLogout}>Log Out</button>
             </>
           ) : (
-            <button onClick={handleLogin}>Log In</button>
+            <button onClick={() => setShowLoginModal(true)}>Log In</button>
           )}
         </nav>
       </header>
+
+      {showLoginModal && (
+        <LoginForm onClose={() => setShowLoginModal(false)} />
+      )}
 
       <main>
         <section className="hero">
